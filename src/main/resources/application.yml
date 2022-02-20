@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: PartitionedBatchtask
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testdb
+    username:
+    password:
+    hikari:
+      idleTimeout: 10000
+      minimum-idle: 0
+      connectionTimeout: 60000
+      maximumPoolSize: 20
+      max-lifetime: 60000
+      leak-detection-threshold: 60000
+  batch:
+    job:
+      enabled: false
+
+worker:
+  mavenUrl: "maven://com.arun.springcloudtask:springcloudtask-demo:1.0-SNAPSHOT"
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          task: DEBUG
+
+maven:
+  remoteRepositories:
+    springRepo:
+      url: https://repo.spring.io/libs-snapshot

@@ -1,0 +1,73 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'idea'
+    id 'java'
+    id 'maven-publish'
+    id 'application'
+}
+
+ext {
+    set('springCloudVersion', "2021.0.1")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    }
+}
+
+group 'com.arun.springcloudtask'
+version '1.0-SNAPSHOT'
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //Spring Cloud task
+    implementation 'org.springframework.cloud:spring-cloud-starter-task'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.cloud:spring-cloud-deployer-local:2.7.2'
+    //Spring Batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    //Spring Integration
+    implementation 'org.springframework.batch:spring-batch-integration'
+
+    runtimeOnly 'org.postgresql:postgresql'
+     testRuntimeOnly 'com.h2database:h2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+application{
+    mainClass = 'com.arun.demo.SpringCloudTaskApplication'
+//    bootJarMainClassName = 'com.arun.demo.SpringCloudTaskApplication'
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+           /* groupId = 'com.arun.springcloudtask'
+            artifactId = 'springcloudtask-demo'
+            version = '1.0-SNAPSHOT'
+
+            from components.java*/
+            artifact bootJar
+        }
+        bootJava(MavenPublication){
+            artifact bootJar
+        }
+    }
+}
